@@ -1,0 +1,51 @@
+Web Server
+apt install apache2
+systemctl enable apache2
+systemctl start apache2
+
+cd /etc/apache2/sites-available/ (file config)
+cp 000-default.conf  osc.com.conf |<namafilekonfigbaru>
+nano osc.com.conf
+EDIT*
+<VirtualHost *:80>
+	ServerName www.oscmantap.com
+	DocumentRoot /var/www/html/oscmantap
+</VirtualHost>
+
+<VirtualHost *:80>
+	ServerName www.osckece.com
+	DocumentRoot /var/www/html/osckece
+</VirtualHost>
+SAVE*
+curl
+cd /var/www/html
+mkdir oscmantap osckece
+cd oscmantap 
+nano index.html
+EDIT*
+<html>
+  <head>
+        <title>ini oscmantap ya</title>
+  </head>
+  <body>
+        <h1> saya tampan dan berhasil</h1?
+  </body>
+</html>
+SAVE*
+cd /var/www/html/osckece/
+nano index.html
+EDIT*
+<html>
+  <head>
+        <title>ini osckece ya</title>
+  </head>
+  <body>
+        <h1> saya tampan dan berhasil</h1?
+  </body>
+</html>
+SAVE*
+
+nano
+a2ensite osc.com.conf <fileconfig> = untuk menyalakan hasil konfig
+a2dissite 000-default.conf <fileconfig> = untuk mematikannya
+systemctl restart apache2
