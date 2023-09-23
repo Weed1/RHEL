@@ -1,0 +1,72 @@
+dnf install bind
+nano /etc/named.conf
+listen-on port 53 { 127.0.0.1;192.168.10.1; }; 192.168.10.1 > DNS Server IP(line 11)
+allow-query        { localhost;192.168.10.0/24; }; (line 19)
+allow-recursion    { localhost;192.168.10.0/24; }; (line 20)
+
+add zones configuration :
+ };
+
+zone "osckece.com" IN {
+        type master;
+        file "/var/named/forward.osckece.com.zone";
+};
+
+zone "oscmantap.com" IN {
+        type master;
+        file "/var/named/forward.oscmantap.com.zone";
+};
+
+zone "10.168.192.in-addr.arpa" IN {
+        type master;
+        file "/var/named/reverse.osc.com.zone";
+        allow-query { any; };
+        allow-transfer { none; };
+};
+
+nano /var/named/forward.oscmantap.com
+$TTL 6048000
+@        IN        SOA       ns1.oscmantap.com. admin.oscmantap.com. (
+                             2022070601         ; serial number
+                             1d                 ; refresh period
+                             3h                 ; retry period
+                             ed                 ; expire time
+                             3h )               ; minimum TTL
+;
+@        IN        NS        ns1.oscmantap.com.
+@        IN        A         192.168.10.1
+www      IN        A         192.168.10.1
+ns1      IN        A         192.168.10.1
+
+nano /var/named/forward.osckece.com
+$TTL 6048000
+@        IN        SOA        ns1.osckece.com. admin.osckece.com. (
+                              2022070601         ; serial number
+                              1d                 ; refresh period
+                              3h                 ; retry period
+                              ed                 ; expire time
+                              3h )               ; minimum TTL
+;
+@        IN        NS        ns1.osckece.com.
+@        IN        A         192.168.10.1
+www      IN        A         192.168.10.1
+ns1      IN        A         192.168.10.1
+
+nano /var/named/reverse.osc.com.zone
+$TTL 8h
+@        IN        SOA        ns1.oscmantap.com. admin.oscmantap.com. (
+                              2022070601 ; serial number
+                              1d         ; refresh period
+                              3h         ; retry period
+                              ed         ; expire time
+                              3h )       ; minimum TTL
+;
+@        IN        NS        ns1.oscmantap.com.
+@        IN        NS        ns1.osckece.com.
+1        IN        NS        ns1.oscmantap.com.
+1        IN        NS        ns1.osckece.com.
+
+systemctl restart named
+nslookup 192.168.10.1
+nslookup osckece.com
+nslookup oscmantap.com
