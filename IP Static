@@ -1,0 +1,24 @@
+nano /etc/NetworkManager/system-connections/enp0s8.nmconnection
+[connection]
+id=enp0s8
+uuid=e4159bb1-c481-31e4-b39a-35cc920d3eee (genuuid enp0s8)
+type=ethernet
+autoconnect-priority=999
+interface-name=enp0s8
+
+[ethernet]
+
+[ipv4]
+method=manual
+address=192.168.10.1/24
+
+[ipv6]
+addr-gen-mode=eu164
+method=auto
+
+[proxy]
+systemctl restart NetworkManager
+
+nmcli connection up eth0 << to activate an interface
+nmcli connection down eth0 << to deactivate an interface
+nmcli device status << to check status
