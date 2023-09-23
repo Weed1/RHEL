@@ -1,0 +1,38 @@
+apt install samba
+nano /etc/samba/smb.conf
+[global]
+   workgroup = WORKGROUP
+   server string = Samba Server
+   security = user
+   
+
+[anonymous]
+   path = /srv/public
+   browseable = yes
+   read only = no
+   guest only = yes
+   writeable = yes
+   guest ok = yes
+
+[auth_login]
+path = /srv/private
+browseable = yes
+guest ok = no
+read only = no
+valid users = tes yanur
+
+cd /srv
+mkdir private public
+
+smbpasswd -a tes
+smbpasswd -a yanur
+
+systemctl restart smb
+
+Client access samba:
+apt install samba-client
+smbclient //192.168.10.1/anonymous
+smbclient //192.168.10.1/auth_login
+
+
+
