@@ -1,0 +1,44 @@
+dnf install httpd
+dnf install mariadb-server
+systemctl start mariadb
+systemctl status mariadb
+systemctl -u root -p (-u menggunakan user dan -p masuk dengan password)
+CREATE DATABASE wordpress;
+wget https://wordpress.org/latest.tar.gz (dnf install wget jika tidak bisa menggunakan wget)
+tar -xvf latest.tar.gz
+cp wordpress/wp-config-sample.php wordpress/wp-config.php
+nano wordpress/wp-config.php
+define('DB_NAME', 'wordpress');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'your_root_password');
+define('DB_HOST', 'localhost');
+cp -R wordpress /var/www/html/ (-R digunakan untuk mengcopy direktori dan seluruh filenya)
+nano /etc/httpd/conf.d/wordpress.conf
+
+<VirtualHost *:80>
+
+DocumentRoot /var/www/html/wordpress
+NameServer osckece.com
+
+<Directory "/var/www/html/wordpress">
+Options Indexes FollowSymLinks
+AllowOverride all
+Require all granted
+</Directory>
+
+</VirtualHost>
+
+<VirtualHost *:80>
+
+DocumentRoot /var/www/html/wordpress
+NameServer oscmantap.com
+
+<Directory "/var/www/html/wordpress">
+Options Indexes FollowSymLinks
+AllowOverride all
+Require all granted
+</Directory>
+
+</VirtualHost>
+
+systemctl restart httpd
